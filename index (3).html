@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commandes 2027 - Libertium</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F5F5;
+    --surface: #FFFFFF;
+    --accent: #C0191A;
+    --accent-dark: #8B1010;
+    --accent-light: #FDEAEA;
+    --text: #111111;
+    --text-muted: #888880;
+    --border: #E0DED8;
+    --input-bg: #F9F8F5;
+    --success: #2D7A4F;
+    --radius: 10px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 5rem; }
+
+  header {
+    background: var(--accent);
+    color: white;
+    padding: 1.1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(192,25,26,0.3);
+  }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .logo-mark { font-size: 19px; font-weight: 600; color: white; letter-spacing: 0.02em; }
+  .logo-sep { width: 1px; height: 26px; background: rgba(255,255,255,0.3); }
+  .header-title { font-size: 13px; font-weight: 400; color: rgba(255,255,255,0.8); }
+  .progress-bar-wrap { display: flex; align-items: center; gap: 10px; }
+  .progress-label { font-size: 12px; color: rgba(255,255,255,0.7); font-family: 'DM Mono', monospace; }
+  .progress-track { width: 100px; height: 3px; background: rgba(255,255,255,0.25); border-radius: 2px; }
+  .progress-fill { height: 3px; background: white; border-radius: 2px; transition: width 0.4s ease; width: 0%; }
+
+  .container { max-width: 780px; margin: 0 auto; padding: 1.5rem 1.5rem 0; }
+
+  .top-fields {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+    box-shadow: var(--shadow);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .field-group { display: flex; flex-direction: column; gap: 6px; }
+  .field-label { font-size: 12px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--input-bg);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  select:focus { outline: none; border-color: var(--accent); }
+  select.selected { border-color: var(--accent); background-color: var(--accent-light); }
+
+  .group-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 1.5rem 0 0.75rem;
+  }
+  .group-line { flex: 1; height: 1px; background: var(--border); }
+  .group-title {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 6px 18px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .group-title.trigano { background: var(--accent); color: white; }
+  .group-title.hors { background: #333; color: white; }
+
+  .marque-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    margin-bottom: 0.6rem;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .marque-card:hover { border-color: #C8C5C0; }
+
+  .marque-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .marque-header:hover { background: var(--input-bg); }
+  .marque-header.open { border-bottom: 1px solid var(--border); }
+  .marque-name { font-size: 13px; font-weight: 600; letter-spacing: 0.03em; }
+  .marque-right { display: flex; align-items: center; gap: 10px; }
+  .marque-chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--bg);
+    padding: 3px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    min-width: 120px;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .marque-chip.has-data { background: var(--accent-light); color: var(--accent); border-color: #F0AAAA; font-weight: 500; }
+  .chevron { width: 14px; height: 14px; color: var(--text-muted); transition: transform 0.25s ease; flex-shrink: 0; }
+  .chevron.open { transform: rotate(180deg); }
+
+  .marque-body { display: none; padding: 14px 16px; }
+  .marque-body.open { display: block; }
+  .rfa-section { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .rfa-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); white-space: nowrap; }
+  .rfa-input-wrap { display: flex; align-items: center; gap: 6px; }
+  .rfa-input { width: 80px; padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 7px; background: var(--input-bg); font-family: "DM Mono", monospace; font-size: 14px; font-weight: 500; text-align: center; color: var(--accent); transition: border-color 0.15s; -moz-appearance: textfield; }
+  .rfa-input::-webkit-outer-spin-button, .rfa-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .rfa-input:focus { outline: none; border-color: var(--accent); background: var(--accent-light); }
+  .rfa-pct { font-size: 14px; font-weight: 500; color: var(--accent); }
+  .rfa-hint { font-size: 11px; color: var(--text-muted); }
+
+  .gamme-section { margin-bottom: 12px; }
+  .gamme-section:last-child { margin-bottom: 0; }
+  .gamme-title {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .gamme-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .gamme-title.commandes { color: var(--accent); }
+  .gamme-title.commandes::after { background: #F0BABA; }
+
+  .gamme-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .gamme-item { display: flex; flex-direction: column; gap: 3px; }
+  .gamme-label { font-size: 10px; color: var(--text-muted); text-align: center; font-family: 'DM Mono', monospace; }
+  .gamme-input {
+    width: 100%;
+    padding: 7px 2px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    background: var(--input-bg);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    color: var(--text);
+    transition: border-color 0.15s, background 0.15s;
+    -moz-appearance: textfield;
+  }
+  .gamme-input::-webkit-outer-spin-button,
+  .gamme-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .gamme-input:focus { outline: none; border-color: var(--accent); background: var(--accent-light); }
+  .gamme-input.nonzero { border-color: #E8A020; background: #FFFBEE; }
+
+  .subtotal-card {
+    border-radius: var(--radius);
+    border: 1.5px solid;
+    padding: 12px 18px;
+    margin: 0.75rem 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .subtotal-card.trigano { border-color: #F0AAAA; background: var(--accent-light); }
+  .subtotal-card.hors { border-color: #C8C5C0; background: #F3F2EE; }
+  .subtotal-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+  .subtotal-card.trigano .subtotal-label { color: var(--accent); }
+  .subtotal-card.hors .subtotal-label { color: #333; }
+  .subtotal-values { display: flex; gap: 1.5rem; }
+  .subtotal-item { text-align: center; }
+  .subtotal-item-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .subtotal-item-value { font-family: 'DM Mono', monospace; font-size: 20px; font-weight: 500; color: var(--text); }
+
+  .total-global-card {
+    background: var(--accent);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 20px rgba(192,25,26,0.2);
+  }
+  .total-global-label { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.85); }
+  .total-global-values { display: flex; gap: 2rem; }
+  .total-global-item { text-align: center; }
+  .total-global-item-label { font-size: 10px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.05em; }
+  .total-global-item-value { font-family: 'DM Mono', monospace; font-size: 24px; font-weight: 500; color: white; }
+
+  .submit-section {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 0.85rem 1.5rem;
+    z-index: 50;
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+  }
+  .submit-inner { max-width: 780px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .submit-info { font-size: 13px; color: var(--text-muted); }
+  .submit-info strong { color: var(--text); font-weight: 500; }
+  .btn-submit {
+    padding: 11px 28px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    white-space: nowrap;
+  }
+  .btn-submit:hover { background: var(--accent-dark); }
+  .btn-submit:active { transform: scale(0.98); }
+  .btn-submit:disabled { background: #CCC; cursor: not-allowed; }
+
+  .toast {
+    position: fixed;
+    bottom: 5.5rem; left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: var(--success);
+    color: white;
+    padding: 11px 22px;
+    border-radius: var(--radius);
+    font-size: 14px; font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+    z-index: 200;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.error { background: #C0391A; }
+  .spinner { display: inline-block; width: 13px; height: 13px; border: 2px solid rgba(255,255,255,0.4); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; margin-right: 6px; vertical-align: middle; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 520px) {
+    .top-fields { grid-template-columns: 1fr; }
+    .gamme-input { font-size: 12px; }
+    .submit-inner { flex-direction: column; align-items: stretch; }
+    .total-global-values, .subtotal-values { gap: 1rem; }
+  }
+
+  /* Confirmation screen */
+  .login-hidden { display: none !important; }
+
+  .confirm-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--accent);
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .confirm-box {
+    background: white;
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+  }
+  .confirm-icon {
+    width: 64px; height: 64px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
+  }
+  .confirm-title { font-size: 22px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .confirm-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 6px; line-height: 1.5; }
+  .confirm-detail { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--accent); background: var(--accent-light); border-radius: var(--radius); padding: 10px 16px; margin: 1rem 0 1.5rem; }
+  .confirm-btn { padding: 12px 32px; background: var(--accent); color: white; border: none; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; }
+  .confirm-btn:hover { background: var(--accent-dark); }
+
+  
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="logo-mark">LIBERTIUM</div>
+    <div class="logo-sep"></div>
+    <div class="header-title" style="font-size:17px;font-weight:600;color:white;">Saisie des commandes 2027</div>
+  </div>
+  <div class="progress-bar-wrap">
+    <span class="progress-label" id="progress-label">0 / 27</span>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="top-fields">
+    <div class="field-group">
+      <div class="field-label">Votre BU *</div>
+      <select id="bu-select">
+        <option value="">Sélectionnez...</option>
+        <option>L.EST</option><option>L.LOIRE</option><option>L.OUEST</option>
+        <option>L.RENNES</option><option>L.STRASBOURG</option><option>L.SUD</option>
+        <option>L.SUD-OUEST</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <div class="field-label">Mois de saisie *</div>
+      <select id="mois-select">
+        <option value="">Sélectionnez...</option>
+        <option>Janvier</option><option>Février</option><option>Mars</option>
+        <option>Avril</option><option>Mai</option><option>Juin</option>
+        <option>Juillet</option><option>Août</option><option>Septembre</option>
+        <option>Octobre</option><option>Novembre</option><option>Décembre</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="marques-container"></div>
+
+  <div class="total-global-card">
+    <div class="total-global-label">Total global</div>
+    <div class="total-global-values">
+      <div class="total-global-item">
+        <div class="total-global-item-label">Pré-commandes</div>
+        <div class="total-global-item-value" id="global-pre">0</div>
+      </div>
+      <div class="total-global-item">
+        <div class="total-global-item-label">Commandes</div>
+        <div class="total-global-item-value" id="global-cmd">0</div>
+      </div>
+      <div class="total-global-item">
+        <div class="total-global-item-label">Total</div>
+        <div class="total-global-item-value" id="global-total">0</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="submit-section">
+  <div class="submit-inner">
+    <div class="submit-info" id="submit-info">Sélectionnez votre BU et le mois pour commencer</div>
+    <button class="btn-submit" id="btn-submit" disabled>Envoyer mes commandes</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="confirm-overlay login-hidden" id="confirm-overlay">
+  <div class="confirm-box">
+    <div class="confirm-icon">✓</div>
+    <div class="confirm-title">Commandes envoyées !</div>
+    <div class="confirm-sub" id="confirm-sub">Vos commandes ont bien été transmises.</div>
+    <div class="confirm-detail" id="confirm-detail"></div>
+    <button class="confirm-btn" id="confirm-btn">Nouvelle saisie</button>
+  </div>
+</div>
+
+<script>
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwYXxKdzEIZel5iu9O86wLmaQguYfIGJaz6_NajRoXaaLZpw_rMjhqDOb54E5mhnaE5BQ/exec';
+const GAMMES = ['Van','Fourgon','Profilé','Capucine','Intégral'];
+const GROUPES = [
+  {
+    id: 'trigano', label: 'Groupe Trigano',
+    marques: ['ADRIA','AUTOSTAR','BENIMAR','CHALLENGER','CHAUSSON','C.I.','EDEN CAMP','EURA MOBIL','FONT VENDOME','MC LOUIS','MOBILVETTA','NOTIN','PANAMA','RANDGER','RIMOR','ROLLER TEAM']
+  },
+  {
+    id: 'hors', label: 'Hors Trigano',
+    marques: ['BAVARIA','BURSTNER','CARTHAGO','CONCORDE','KNAUS','LE VOYAGEUR','MALIBU','MORELO','POSSL','RAPIDO','WESTALIA']
+  }
+];
+const ALL_MARQUES = [...GROUPES[0].marques, ...GROUPES[1].marques];
+let globalIdx = 0;
+
+function buildForm() {
+  const container = document.getElementById('marques-container');
+  globalIdx = 0;
+  GROUPES.forEach(groupe => {
+    const gh = document.createElement('div');
+    gh.className = 'group-header';
+    gh.innerHTML = `<div class="group-line"></div><div class="group-title ${groupe.id}">${groupe.label}</div><div class="group-line"></div>`;
+    container.appendChild(gh);
+
+    groupe.marques.forEach(marque => {
+      const idx = globalIdx++;
+      const card = document.createElement('div');
+      card.className = 'marque-card';
+      const header = document.createElement('div');
+      header.className = 'marque-header';
+      header.innerHTML = `
+        <span class="marque-name">${marque}</span>
+        <div class="marque-right">
+          <span class="marque-chip" id="chip-${idx}">vide</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>`;
+      const body = document.createElement('div');
+      body.className = 'marque-body';
+
+      ['pre','cmd'].forEach(type => {
+        const section = document.createElement('div');
+        section.className = 'gamme-section';
+        const label = type === 'pre' ? 'Pré-commandes' : 'Commandes';
+        section.innerHTML = `<div class="gamme-title ${type === 'cmd' ? 'commandes' : ''}">${label}</div>`;
+        const grid = document.createElement('div');
+        grid.className = 'gamme-grid';
+        GAMMES.forEach(g => {
+          const item = document.createElement('div');
+          item.className = 'gamme-item';
+          item.innerHTML = `<div class="gamme-label">${g}</div><input class="gamme-input" type="number" value="0" min="0" data-idx="${idx}" data-marque="${marque}" data-groupe="${groupe.id}" data-type="${type}" data-gamme="${g}">`;
+          grid.appendChild(item);
+        });
+        section.appendChild(grid);
+        body.appendChild(section);
+      });
+
+      // RFA
+      const rfaSection = document.createElement('div');
+      rfaSection.className = 'rfa-section';
+      rfaSection.innerHTML = `
+        <span class="rfa-label">Taux de RFA obtenu</span>
+        <div class="rfa-input-wrap">
+          <input class="rfa-input" type="number" value="" min="0" max="100" step="0.1" placeholder="0" data-idx="${idx}" data-type="rfa">
+          <span class="rfa-pct">%</span>
+        </div>
+        <span class="rfa-hint">grâce à ces commandes</span>
+      `;
+      body.appendChild(rfaSection);
+
+      header.addEventListener('click', () => {
+        const open = body.classList.toggle('open');
+        header.classList.toggle('open', open);
+        header.querySelector('.chevron').classList.toggle('open', open);
+      });
+      // Ouvert par défaut
+      body.classList.add('open');
+      header.classList.add('open');
+      header.querySelector('.chevron').classList.add('open');
+      card.appendChild(header);
+      card.appendChild(body);
+      container.appendChild(card);
+    });
+
+    const sub = document.createElement('div');
+    sub.className = `subtotal-card ${groupe.id}`;
+    sub.innerHTML = `
+      <div class="subtotal-label">Sous-total ${groupe.label}</div>
+      <div class="subtotal-values">
+        <div class="subtotal-item"><div class="subtotal-item-label">Pré-commandes</div><div class="subtotal-item-value" id="sub-pre-${groupe.id}">0</div></div>
+        <div class="subtotal-item"><div class="subtotal-item-label">Commandes</div><div class="subtotal-item-value" id="sub-cmd-${groupe.id}">0</div></div>
+        <div class="subtotal-item"><div class="subtotal-item-label">Total</div><div class="subtotal-item-value" id="sub-total-${groupe.id}">0</div></div>
+      </div>`;
+    container.appendChild(sub);
+  });
+
+  document.querySelectorAll('.gamme-input').forEach(input => {
+    input.addEventListener('input', () => {
+      input.classList.toggle('nonzero', (parseInt(input.value) || 0) > 0);
+      updateChip(input.dataset.idx);
+      updateTotaux();
+      updateSubmitInfo();
+    });
+    input.addEventListener('focus', () => input.select());
+  });
+}
+
+function getSum(selector) {
+  let t = 0;
+  document.querySelectorAll(selector).forEach(i => t += parseInt(i.value) || 0);
+  return t;
+}
+
+function updateChip(idx) {
+  const pre = getSum(`[data-idx="${idx}"][data-type="pre"]`);
+  const cmd = getSum(`[data-idx="${idx}"][data-type="cmd"]`);
+  const total = pre + cmd;
+  const chip = document.getElementById(`chip-${idx}`);
+  if (total > 0) {
+    chip.innerHTML = `Pré: ${pre} &nbsp;|&nbsp; Cmd: ${cmd}`;
+    chip.classList.add('has-data');
+  } else {
+    chip.textContent = 'vide';
+    chip.classList.remove('has-data');
+  }
+}
+
+function updateTotaux() {
+  let gPre = 0, gCmd = 0;
+  GROUPES.forEach(g => {
+    const pre = getSum(`[data-groupe="${g.id}"][data-type="pre"]`);
+    const cmd = getSum(`[data-groupe="${g.id}"][data-type="cmd"]`);
+    document.getElementById(`sub-pre-${g.id}`).textContent = pre;
+    document.getElementById(`sub-cmd-${g.id}`).textContent = cmd;
+    document.getElementById(`sub-total-${g.id}`).textContent = pre + cmd;
+    gPre += pre; gCmd += cmd;
+  });
+  document.getElementById('global-pre').textContent = gPre;
+  document.getElementById('global-cmd').textContent = gCmd;
+  document.getElementById('global-total').textContent = gPre + gCmd;
+
+  let filled = 0;
+  for (let i = 0; i < ALL_MARQUES.length; i++) {
+    if (getSum(`[data-idx="${i}"]`) > 0) filled++;
+  }
+  document.getElementById('progress-label').textContent = `${filled} / ${ALL_MARQUES.length}`;
+  document.getElementById('progress-fill').style.width = `${(filled / ALL_MARQUES.length) * 100}%`;
+}
+
+function updateSubmitInfo() {
+  const bu = document.getElementById('bu-select').value;
+  const mois = document.getElementById('mois-select').value;
+  const btn = document.getElementById('btn-submit');
+  const info = document.getElementById('submit-info');
+  if (bu && mois) {
+    btn.disabled = false;
+    const gt = parseInt(document.getElementById('global-total').textContent) || 0;
+    info.innerHTML = `<strong>${bu}</strong> &mdash; <strong>${mois}</strong> &mdash; ${gt} unité${gt !== 1 ? 's' : ''} saisie${gt !== 1 ? 's' : ''}`;
+  } else {
+    btn.disabled = true;
+    info.textContent = 'Sélectionnez votre BU et le mois pour commencer';
+  }
+}
+
+function collectData() {
+  const bu = document.getElementById('bu-select').value;
+  const mois = document.getElementById('mois-select').value;
+  const row = { BU: bu, Mois: mois, Timestamp: new Date().toISOString() };
+  ALL_MARQUES.forEach((marque, idx) => {
+    GAMMES.forEach(g => {
+      const pre = parseInt(document.querySelector(`[data-idx="${idx}"][data-type="pre"][data-gamme="${g}"]`)?.value) || 0;
+      const cmd = parseInt(document.querySelector(`[data-idx="${idx}"][data-type="cmd"][data-gamme="${g}"]`)?.value) || 0;
+      row[`${marque}_PRE_${g}`] = pre;
+      row[`${marque}_CMD_${g}`] = cmd;
+    });
+    row[`${marque}_TOTAL_PRE`] = getSum(`[data-idx="${idx}"][data-type="pre"]`);
+    row[`${marque}_TOTAL_CMD`] = getSum(`[data-idx="${idx}"][data-type="cmd"]`);
+    row[`${marque}_TOTAL`] = (row[`${marque}_TOTAL_PRE`] || 0) + (row[`${marque}_TOTAL_CMD`] || 0);
+    const rfaInput = document.querySelector(`[data-idx="${idx}"][data-type="rfa"]`);
+    row[`${marque}_RFA_PCT`] = rfaInput ? (parseFloat(rfaInput.value) || 0) : 0;
+  });
+  GROUPES.forEach(g => {
+    row[`SOUS_TOTAL_${g.id.toUpperCase()}_PRE`] = parseInt(document.getElementById(`sub-pre-${g.id}`).textContent) || 0;
+    row[`SOUS_TOTAL_${g.id.toUpperCase()}_CMD`] = parseInt(document.getElementById(`sub-cmd-${g.id}`).textContent) || 0;
+    row[`SOUS_TOTAL_${g.id.toUpperCase()}`] = parseInt(document.getElementById(`sub-total-${g.id}`).textContent) || 0;
+  });
+  row['TOTAL_GLOBAL_PRE'] = parseInt(document.getElementById('global-pre').textContent) || 0;
+  row['TOTAL_GLOBAL_CMD'] = parseInt(document.getElementById('global-cmd').textContent) || 0;
+  row['TOTAL_GLOBAL'] = parseInt(document.getElementById('global-total').textContent) || 0;
+  return row;
+}
+
+function showToast(msg, isError = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (isError ? ' error' : '') + ' show';
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+document.getElementById('bu-select').addEventListener('change', function() {
+  this.classList.toggle('selected', !!this.value);
+  updateSubmitInfo();
+});
+document.getElementById('mois-select').addEventListener('change', function() {
+  this.classList.toggle('selected', !!this.value);
+  updateSubmitInfo();
+});
+
+document.getElementById('btn-submit').addEventListener('click', async () => {
+  const bu = document.getElementById('bu-select').value;
+  const mois = document.getElementById('mois-select').value;
+  if (!bu || !mois) { showToast('Veuillez sélectionner BU et mois', true); return; }
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Envoi en cours...';
+  const data = collectData();
+  // Envoi via Google Form (sans CORS)
+  try {
+    const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScT1CcJjwzoyAdM9xOMaSOw5ZmWog9lpr3SzqFQxKJgpvsRSQ/formResponse';
+    const formData = new FormData();
+    formData.append('entry.1802010262', JSON.stringify(data));
+    fetch(FORM_URL, { method: 'POST', mode: 'no-cors', body: formData }).catch(() => {});
+  } catch(e) {}
+  showConfirm(bu, mois);
+});
+
+function showConfirm(bu, mois) {
+  const gt = parseInt(document.getElementById('global-total').textContent) || 0;
+  document.getElementById('confirm-sub').textContent = bu + ' — ' + mois + ' 2027';
+  document.getElementById('confirm-detail').textContent = gt + ' unité' + (gt > 1 ? 's' : '') + ' transmise' + (gt > 1 ? 's' : '') + ' avec succès';
+  document.getElementById('confirm-overlay').classList.remove('login-hidden');
+}
+
+document.getElementById('confirm-btn').addEventListener('click', () => {
+  document.getElementById('confirm-overlay').classList.add('login-hidden');
+  document.getElementById('bu-select').value = '';
+  document.getElementById('mois-select').value = '';
+  document.querySelectorAll('.gamme-input').forEach(i => { i.value = 0; i.classList.remove('nonzero'); });
+  document.querySelectorAll('.marque-chip').forEach(c => { c.textContent = 'vide'; c.classList.remove('has-data'); });
+  document.getElementById('global-pre').textContent = '0';
+  document.getElementById('global-cmd').textContent = '0';
+  document.getElementById('global-total').textContent = '0';
+  document.querySelectorAll('[id^="sub-"]').forEach(e => e.textContent = '0');
+  document.getElementById('progress-label').textContent = '0 / 27';
+  document.getElementById('progress-fill').style.width = '0%';
+  document.getElementById('submit-info').textContent = 'Sélectionnez votre BU et le mois pour commencer';
+  document.getElementById('btn-submit').disabled = true;
+  document.getElementById('btn-submit').innerHTML = 'Envoyer mes commandes';
+});
+
+buildForm();
+
+
+</script>
+</body>
+</html>
