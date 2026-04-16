@@ -606,10 +606,10 @@ document.getElementById('btn-submit').addEventListener('click', async () => {
     formData.append('entry.1802010262', JSON.stringify(data));
     fetch(FORM_URL, { method: 'POST', mode: 'no-cors', body: formData }).catch(() => {});
   } catch(e) {}
-  showConfirm(bu, mois);
+  showConfirm(bu);
 });
  
-function showConfirm(bu, mois) {
+function showConfirm(bu) {
   const gt = parseInt(document.getElementById('global-total').textContent) || 0;
   document.getElementById('confirm-sub').textContent = bu + ' — ' + new Date().toLocaleDateString('fr-FR');
   document.getElementById('confirm-detail').textContent = gt + ' unité' + (gt > 1 ? 's' : '') + ' transmise' + (gt > 1 ? 's' : '') + ' avec succès';
@@ -639,3 +639,4 @@ buildForm();
 </script>
 </body>
 </html>
+ 
