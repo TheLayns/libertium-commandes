@@ -22,7 +22,7 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 5rem; }
- 
+
   header {
     background: var(--accent);
     color: white;
@@ -43,9 +43,9 @@
   .progress-label { font-size: 12px; color: rgba(255,255,255,0.7); font-family: 'DM Mono', monospace; }
   .progress-track { width: 100px; height: 3px; background: rgba(255,255,255,0.25); border-radius: 2px; }
   .progress-fill { height: 3px; background: white; border-radius: 2px; transition: width 0.4s ease; width: 0%; }
- 
+
   .container { max-width: 780px; margin: 0 auto; padding: 1.5rem 1.5rem 0; }
- 
+
   .top-fields {
     background: var(--surface);
     border-radius: var(--radius);
@@ -77,7 +77,7 @@
   }
   select:focus { outline: none; border-color: var(--accent); }
   select.selected { border-color: var(--accent); background-color: var(--accent-light); }
- 
+
   .group-header {
     display: flex;
     align-items: center;
@@ -96,7 +96,7 @@
   }
   .group-title.trigano { background: var(--accent); color: white; }
   .group-title.hors { background: #333; color: white; }
- 
+
   .marque-card {
     background: var(--surface);
     border-radius: var(--radius);
@@ -107,7 +107,7 @@
     transition: border-color 0.2s;
   }
   .marque-card:hover { border-color: #C8C5C0; }
- 
+
   .marque-header {
     display: flex;
     align-items: center;
@@ -136,7 +136,7 @@
   .marque-chip.has-data { background: var(--accent-light); color: var(--accent); border-color: #F0AAAA; font-weight: 500; }
   .chevron { width: 14px; height: 14px; color: var(--text-muted); transition: transform 0.25s ease; flex-shrink: 0; }
   .chevron.open { transform: rotate(180deg); }
- 
+
   .marque-body { display: none; padding: 14px 16px; }
   .marque-body.open { display: block; }
   .rfa-section { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
@@ -147,7 +147,7 @@
   .rfa-input:focus { outline: none; border-color: var(--accent); background: var(--accent-light); }
   .rfa-pct { font-size: 14px; font-weight: 500; color: var(--accent); }
   .rfa-hint { font-size: 11px; color: var(--text-muted); }
- 
+
   .gamme-section { margin-bottom: 12px; }
   .gamme-section:last-child { margin-bottom: 0; }
   .gamme-title {
@@ -164,7 +164,7 @@
   .gamme-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
   .gamme-title.commandes { color: var(--accent); }
   .gamme-title.commandes::after { background: #F0BABA; }
- 
+
   .gamme-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
   .gamme-item { display: flex; flex-direction: column; gap: 3px; }
   .gamme-label { font-size: 10px; color: var(--text-muted); text-align: center; font-family: 'DM Mono', monospace; }
@@ -186,7 +186,7 @@
   .gamme-input::-webkit-inner-spin-button { -webkit-appearance: none; }
   .gamme-input:focus { outline: none; border-color: var(--accent); background: var(--accent-light); }
   .gamme-input.nonzero { border-color: #E8A020; background: #FFFBEE; }
- 
+
   .subtotal-card {
     border-radius: var(--radius);
     border: 1.5px solid;
@@ -205,7 +205,7 @@
   .subtotal-item { text-align: center; }
   .subtotal-item-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
   .subtotal-item-value { font-family: 'DM Mono', monospace; font-size: 20px; font-weight: 500; color: var(--text); }
- 
+
   .total-global-card {
     background: var(--accent);
     border-radius: var(--radius);
@@ -221,7 +221,7 @@
   .total-global-item { text-align: center; }
   .total-global-item-label { font-size: 10px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.05em; }
   .total-global-item-value { font-family: 'DM Mono', monospace; font-size: 24px; font-weight: 500; color: white; }
- 
+
   .submit-section {
     position: fixed;
     bottom: 0; left: 0; right: 0;
@@ -250,7 +250,7 @@
   .btn-submit:hover { background: var(--accent-dark); }
   .btn-submit:active { transform: scale(0.98); }
   .btn-submit:disabled { background: #CCC; cursor: not-allowed; }
- 
+
   .toast {
     position: fixed;
     bottom: 5.5rem; left: 50%;
@@ -268,19 +268,64 @@
   }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   .toast.error { background: #C0391A; }
+  .btn-history {
+    padding: 8px 18px;
+    background: transparent;
+    color: white;
+    border: 1.5px solid rgba(255,255,255,0.5);
+    border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+    margin-right: 8px;
+  }
+  .btn-history:hover { background: rgba(255,255,255,0.15); }
+
+  .history-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .history-box {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 700px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+  }
+  .history-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
+  .history-close { cursor: pointer; font-size: 20px; color: var(--text-muted); background: none; border: none; }
+  .history-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .history-table th { background: var(--accent); color: white; padding: 8px; text-align: left; font-weight: 500; }
+  .history-table td { padding: 7px 8px; border-bottom: 1px solid var(--border); color: var(--text); }
+  .history-table tr:hover td { background: var(--input-bg); }
+  .history-empty { text-align: center; color: var(--text-muted); padding: 2rem; font-size: 14px; }
+  .history-loading { text-align: center; color: var(--text-muted); padding: 2rem; font-size: 14px; }
+
   .spinner { display: inline-block; width: 13px; height: 13px; border: 2px solid rgba(255,255,255,0.4); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; margin-right: 6px; vertical-align: middle; }
   @keyframes spin { to { transform: rotate(360deg); } }
- 
+
   @media (max-width: 520px) {
     .top-fields { grid-template-columns: 1fr; }
     .gamme-input { font-size: 12px; }
     .submit-inner { flex-direction: column; align-items: stretch; }
     .total-global-values, .subtotal-values { gap: 1rem; }
   }
- 
+
   /* Confirmation screen */
   .login-hidden { display: none !important; }
- 
+
   .confirm-overlay {
     position: fixed;
     inset: 0;
@@ -315,24 +360,25 @@
   .confirm-detail { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--accent); background: var(--accent-light); border-radius: var(--radius); padding: 10px 16px; margin: 1rem 0 1.5rem; }
   .confirm-btn { padding: 12px 32px; background: var(--accent); color: white; border: none; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; }
   .confirm-btn:hover { background: var(--accent-dark); }
- 
+
   
 </style>
 </head>
 <body>
- 
+
 <header>
   <div class="header-left">
     <div class="logo-mark">LIBERTIUM</div>
     <div class="logo-sep"></div>
     <div class="header-title" style="font-size:17px;font-weight:600;color:white;">Saisie des commandes 2027</div>
   </div>
+  <button class="btn-history" id="btn-history" style="display:none;">Voir mes saisies</button>
   <div class="progress-bar-wrap">
     <span class="progress-label" id="progress-label">0 / 27</span>
     <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
   </div>
 </header>
- 
+
 <div class="container">
   <div class="top-fields">
     <div class="field-group">
@@ -344,11 +390,11 @@
         <option>L.SUD-OUEST</option>
       </select>
     </div>
- 
+
   </div>
- 
+
   <div id="marques-container"></div>
- 
+
   <div class="total-global-card">
     <div class="total-global-label">Total global</div>
     <div class="total-global-values">
@@ -367,16 +413,26 @@
     </div>
   </div>
 </div>
- 
+
 <div class="submit-section">
   <div class="submit-inner">
     <div class="submit-info" id="submit-info">Sélectionnez votre BU et le mois pour commencer</div>
     <button class="btn-submit" id="btn-submit" disabled>Envoyer mes commandes</button>
   </div>
 </div>
- 
+
+<div class="history-overlay login-hidden" id="history-overlay">
+  <div class="history-box">
+    <div class="history-title">
+      <span>Historique de mes saisies</span>
+      <button class="history-close" id="history-close">✕</button>
+    </div>
+    <div id="history-content"><div class="history-loading">Chargement...</div></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
- 
+
 <div class="confirm-overlay login-hidden" id="confirm-overlay">
   <div class="confirm-box">
     <div class="confirm-icon">✓</div>
@@ -386,9 +442,9 @@
     <button class="confirm-btn" id="confirm-btn">Nouvelle saisie</button>
   </div>
 </div>
- 
+
 <script>
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwYXxKdzEIZel5iu9O86wLmaQguYfIGJaz6_NajRoXaaLZpw_rMjhqDOb54E5mhnaE5BQ/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwGNdGBk585IFM6bz99tf6cY3fPaVh9RtEJIbVsKbQ0fWdKMV3SeEI_Q6Dy1JAxQTv_/exec';
 const GAMMES = ['Van','Fourgon','Profilé','Capucine','Intégral'];
 const GROUPES = [
   {
@@ -402,7 +458,7 @@ const GROUPES = [
 ];
 const ALL_MARQUES = [...GROUPES[0].marques, ...GROUPES[1].marques];
 let globalIdx = 0;
- 
+
 function buildForm() {
   const container = document.getElementById('marques-container');
   globalIdx = 0;
@@ -411,7 +467,7 @@ function buildForm() {
     gh.className = 'group-header';
     gh.innerHTML = `<div class="group-line"></div><div class="group-title ${groupe.id}">${groupe.label}</div><div class="group-line"></div>`;
     container.appendChild(gh);
- 
+
     groupe.marques.forEach(marque => {
       const idx = globalIdx++;
       const card = document.createElement('div');
@@ -426,7 +482,7 @@ function buildForm() {
         </div>`;
       const body = document.createElement('div');
       body.className = 'marque-body';
- 
+
       ['pre','cmd'].forEach(type => {
         const section = document.createElement('div');
         section.className = 'gamme-section';
@@ -443,7 +499,7 @@ function buildForm() {
         section.appendChild(grid);
         body.appendChild(section);
       });
- 
+
       // RFA
       const rfaSection = document.createElement('div');
       rfaSection.className = 'rfa-section';
@@ -456,7 +512,7 @@ function buildForm() {
         <span class="rfa-hint">grâce à ces commandes</span>
       `;
       body.appendChild(rfaSection);
- 
+
       header.addEventListener('click', () => {
         const open = body.classList.toggle('open');
         header.classList.toggle('open', open);
@@ -470,7 +526,7 @@ function buildForm() {
       card.appendChild(body);
       container.appendChild(card);
     });
- 
+
     const sub = document.createElement('div');
     sub.className = `subtotal-card ${groupe.id}`;
     sub.innerHTML = `
@@ -482,7 +538,7 @@ function buildForm() {
       </div>`;
     container.appendChild(sub);
   });
- 
+
   document.querySelectorAll('.gamme-input').forEach(input => {
     input.addEventListener('input', () => {
       input.classList.toggle('nonzero', (parseInt(input.value) || 0) > 0);
@@ -493,13 +549,13 @@ function buildForm() {
     input.addEventListener('focus', () => input.select());
   });
 }
- 
+
 function getSum(selector) {
   let t = 0;
   document.querySelectorAll(selector).forEach(i => t += parseInt(i.value) || 0);
   return t;
 }
- 
+
 function updateChip(idx) {
   const pre = getSum(`[data-idx="${idx}"][data-type="pre"]`);
   const cmd = getSum(`[data-idx="${idx}"][data-type="cmd"]`);
@@ -513,7 +569,7 @@ function updateChip(idx) {
     chip.classList.remove('has-data');
   }
 }
- 
+
 function updateTotaux() {
   let gPre = 0, gCmd = 0;
   GROUPES.forEach(g => {
@@ -527,7 +583,7 @@ function updateTotaux() {
   document.getElementById('global-pre').textContent = gPre;
   document.getElementById('global-cmd').textContent = gCmd;
   document.getElementById('global-total').textContent = gPre + gCmd;
- 
+
   let filled = 0;
   for (let i = 0; i < ALL_MARQUES.length; i++) {
     if (getSum(`[data-idx="${i}"]`) > 0) filled++;
@@ -535,7 +591,7 @@ function updateTotaux() {
   document.getElementById('progress-label').textContent = `${filled} / ${ALL_MARQUES.length}`;
   document.getElementById('progress-fill').style.width = `${(filled / ALL_MARQUES.length) * 100}%`;
 }
- 
+
 function updateSubmitInfo() {
   const bu = document.getElementById('bu-select').value;
   const btn = document.getElementById('btn-submit');
@@ -549,7 +605,7 @@ function updateSubmitInfo() {
     info.textContent = 'Sélectionnez votre BU pour commencer';
   }
 }
- 
+
 function collectData() {
   const bu = document.getElementById('bu-select').value;
   const now = new Date();
@@ -578,20 +634,20 @@ function collectData() {
   row['TOTAL_GLOBAL'] = parseInt(document.getElementById('global-total').textContent) || 0;
   return row;
 }
- 
+
 function showToast(msg, isError = false) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.className = 'toast' + (isError ? ' error' : '') + ' show';
   setTimeout(() => t.classList.remove('show'), 3500);
 }
- 
+
 document.getElementById('bu-select').addEventListener('change', function() {
   this.classList.toggle('selected', !!this.value);
   updateSubmitInfo();
 });
- 
- 
+
+
 document.getElementById('btn-submit').addEventListener('click', async () => {
   const bu = document.getElementById('bu-select').value;
   if (!bu) { showToast('Veuillez sélectionner votre BU', true); return; }
@@ -608,18 +664,18 @@ document.getElementById('btn-submit').addEventListener('click', async () => {
   } catch(e) {}
   showConfirm(bu);
 });
- 
+
 function showConfirm(bu) {
   const gt = parseInt(document.getElementById('global-total').textContent) || 0;
   document.getElementById('confirm-sub').textContent = bu + ' — ' + new Date().toLocaleDateString('fr-FR');
   document.getElementById('confirm-detail').textContent = gt + ' unité' + (gt > 1 ? 's' : '') + ' transmise' + (gt > 1 ? 's' : '') + ' avec succès';
   document.getElementById('confirm-overlay').classList.remove('login-hidden');
 }
- 
+
 document.getElementById('confirm-btn').addEventListener('click', () => {
   document.getElementById('confirm-overlay').classList.add('login-hidden');
   document.getElementById('bu-select').value = '';
- 
+
   document.querySelectorAll('.gamme-input').forEach(i => { i.value = 0; i.classList.remove('nonzero'); });
   document.querySelectorAll('.marque-chip').forEach(c => { c.textContent = 'vide'; c.classList.remove('has-data'); });
   document.getElementById('global-pre').textContent = '0';
@@ -632,11 +688,51 @@ document.getElementById('confirm-btn').addEventListener('click', () => {
   document.getElementById('btn-submit').disabled = true;
   document.getElementById('btn-submit').innerHTML = 'Envoyer mes commandes';
 });
- 
+
+// Historique
+document.getElementById('bu-select').addEventListener('change', function() {
+  const btn = document.getElementById('btn-history');
+  btn.style.display = this.value ? 'inline-block' : 'none';
+});
+
+document.getElementById('btn-history').addEventListener('click', async () => {
+  const bu = document.getElementById('bu-select').value;
+  if (!bu) return;
+  document.getElementById('history-overlay').classList.remove('login-hidden');
+  document.getElementById('history-content').innerHTML = '<div class="history-loading">Chargement...</div>';
+  try {
+    const resp = await fetch(GOOGLE_SCRIPT_URL + '?bu=' + encodeURIComponent(bu));
+    const rows = await resp.json();
+    if (rows.length === 0) {
+      document.getElementById('history-content').innerHTML = '<div class="history-empty">Aucune saisie trouvée pour cette BU.</div>';
+      return;
+    }
+    const dates = [...new Set(rows.map(r => r.Date))].sort().reverse();
+    let html = '';
+    dates.forEach(date => {
+      const lignes = rows.filter(r => r.Date === date);
+      const total = lignes.reduce((s, r) => s + (parseInt(r.Van)||0) + (parseInt(r.Fourgon)||0) + (parseInt(r['Profilé'])||0) + (parseInt(r.Capucine)||0) + (parseInt(r['Intégral'])||0), 0);
+      html += '<div style="margin-bottom:1.5rem">';
+      html += '<div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:8px;">Saisie du ' + date + ' — ' + total + ' unité' + (total > 1 ? 's' : '') + '</div>';
+      html += '<table class="history-table"><thead><tr><th>Statut</th><th>Marque</th><th>Van</th><th>Fourgon</th><th>Profilé</th><th>Capucine</th><th>Intégral</th><th>RFA</th></tr></thead><tbody>';
+      lignes.forEach(r => {
+        html += '<tr><td>' + r.Statut + '</td><td>' + r.Marque + '</td><td>' + (r.Van||0) + '</td><td>' + (r.Fourgon||0) + '</td><td>' + (r['Profilé']||0) + '</td><td>' + (r.Capucine||0) + '</td><td>' + (r['Intégral']||0) + '</td><td>' + (r.RFA||0) + '%</td></tr>';
+      });
+      html += '</tbody></table></div>';
+    });
+    document.getElementById('history-content').innerHTML = html;
+  } catch(err) {
+    document.getElementById('history-content').innerHTML = '<div class="history-empty">Erreur de chargement. Réessayez.</div>';
+  }
+});
+
+document.getElementById('history-close').addEventListener('click', () => {
+  document.getElementById('history-overlay').classList.add('login-hidden');
+});
+
 buildForm();
- 
- 
+
+
 </script>
 </body>
 </html>
- 
