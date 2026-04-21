@@ -748,7 +748,7 @@ document.getElementById('btn-history').addEventListener('click', async () => {
       document.getElementById('history-content').innerHTML = '<div class="history-empty">Délai dépassé. Réessayez.</div>';
       delete window._historyCallback;
     }
-  }, 8000);
+  }, 20000);
 });
 
 document.getElementById('history-close').addEventListener('click', () => {
