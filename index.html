@@ -444,7 +444,7 @@
 </div>
 
 <script>
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyux5ySb68A-yEsEiXScaUFrF9zbbzUeELB1C8QW8zLwkuIKdfL4PH_fRbz_8e11fTk/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxLK1WejJUs2oD8KRcZnE2bZrqd2Ig8rWNFWJlglZVpwwiNDOC58CVd6U8TJQI2UuEn/exec';
 const GAMMES = ['Van','Fourgon','Profilé','Capucine','Intégral'];
 const GROUPES = [
   {
@@ -700,10 +700,12 @@ document.getElementById('btn-history').addEventListener('click', async () => {
   if (!bu) return;
   document.getElementById('history-overlay').classList.remove('login-hidden');
   document.getElementById('history-content').innerHTML = '<div class="history-loading">Chargement...</div>';
-  try {
-    const resp = await fetch(GOOGLE_SCRIPT_URL + '?bu=' + encodeURIComponent(bu));
-    const rows = await resp.json();
-    if (rows.length === 0) {
+  // JSONP pour contourner CORS
+  window._historyCallback = function(rows) {
+    delete window._historyCallback;
+    const old = document.getElementById('jsonp-script');
+    if (old) old.remove();
+    if (!rows || rows.length === 0) {
       document.getElementById('history-content').innerHTML = '<div class="history-empty">Aucune saisie trouvée pour cette BU.</div>';
       return;
     }
@@ -721,9 +723,20 @@ document.getElementById('btn-history').addEventListener('click', async () => {
       html += '</tbody></table></div>';
     });
     document.getElementById('history-content').innerHTML = html;
-  } catch(err) {
+  };
+  const script = document.createElement('script');
+  script.id = 'jsonp-script';
+  script.src = GOOGLE_SCRIPT_URL + '?bu=' + encodeURIComponent(bu) + '&callback=_historyCallback';
+  script.onerror = () => {
     document.getElementById('history-content').innerHTML = '<div class="history-empty">Erreur de chargement. Réessayez.</div>';
-  }
+  };
+  document.body.appendChild(script);
+  setTimeout(() => {
+    if (window._historyCallback) {
+      document.getElementById('history-content').innerHTML = '<div class="history-empty">Délai dépassé. Réessayez.</div>';
+      delete window._historyCallback;
+    }
+  }, 8000);
 });
 
 document.getElementById('history-close').addEventListener('click', () => {
