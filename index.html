@@ -709,10 +709,22 @@ document.getElementById('btn-history').addEventListener('click', async () => {
       document.getElementById('history-content').innerHTML = '<div class="history-empty">Aucune saisie trouvée pour cette BU.</div>';
       return;
     }
-    const dates = [...new Set(rows.map(r => r.Date))].sort().reverse();
+    // Formatter la date proprement
+    const formatDate = (d) => {
+      if (!d) return 'Date inconnue';
+      if (typeof d === 'string' && d.includes('/')) return d;
+      const date = new Date(d);
+      if (isNaN(date)) return d;
+      return date.toLocaleDateString('fr-FR', {day:'2-digit', month:'2-digit', year:'numeric'});
+    };
+    const dates = [...new Set(rows.map(r => formatDate(r.Date)))].sort((a,b) => {
+      const pa = a.split('/').reverse().join('');
+      const pb = b.split('/').reverse().join('');
+      return pb.localeCompare(pa);
+    });
     let html = '';
     dates.forEach(date => {
-      const lignes = rows.filter(r => r.Date === date);
+      const lignes = rows.filter(r => formatDate(r.Date) === date);
       const total = lignes.reduce((s, r) => s + (parseInt(r.Van)||0) + (parseInt(r.Fourgon)||0) + (parseInt(r['Profilé'])||0) + (parseInt(r.Capucine)||0) + (parseInt(r['Intégral'])||0), 0);
       html += '<div style="margin-bottom:1.5rem">';
       html += '<div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:8px;">Saisie du ' + date + ' — ' + total + ' unité' + (total > 1 ? 's' : '') + '</div>';
