@@ -726,18 +726,43 @@ document.getElementById('btn-history').addEventListener('click', async () => {
       const pb = b.split('/').reverse().join('');
       return pb.localeCompare(pa);
     });
+    const gammes = ['Van','Fourgon','Profilé','Capucine','Intégral'];
+    const getTotal = (r) => gammes.reduce((s, g) => s + (parseInt(r[g])||0), 0);
+ 
+    // Fonction table par marque
+    const makeTable = (lignes) => {
+      // Regrouper par marque
+      const marques = [...new Set(lignes.map(r => r.Marque))];
+      let t = '<table class="history-table"><thead><tr><th>Marque</th><th>Pré-commandes</th><th>Commandes</th><th>Total</th></tr></thead><tbody>';
+      marques.forEach(marque => {
+        const pre = lignes.filter(r => r.Marque === marque && r.Statut === 'Pré-commandes');
+        const cmd = lignes.filter(r => r.Marque === marque && r.Statut === 'Commandes');
+        const totalPre = pre.reduce((s, r) => s + getTotal(r), 0);
+        const totalCmd = cmd.reduce((s, r) => s + getTotal(r), 0);
+        const total = totalPre + totalCmd;
+        t += '<tr><td><strong>' + marque + '</strong></td><td>' + totalPre + '</td><td>' + totalCmd + '</td><td><strong>' + total + '</strong></td></tr>';
+      });
+      t += '</tbody></table>';
+      return t;
+    };
+ 
     let html = '';
     dates.forEach(date => {
       const lignes = rows.filter(r => formatDate(r.Date) === date);
-      const total = lignes.reduce((s, r) => s + (parseInt(r.Van)||0) + (parseInt(r.Fourgon)||0) + (parseInt(r['Profilé'])||0) + (parseInt(r.Capucine)||0) + (parseInt(r['Intégral'])||0), 0);
+      const total = lignes.reduce((s, r) => s + getTotal(r), 0);
       html += '<div style="margin-bottom:1.5rem">';
       html += '<div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:8px;">Saisie du ' + date + ' — ' + total + ' unité' + (total > 1 ? 's' : '') + '</div>';
-      html += '<table class="history-table"><thead><tr><th>Statut</th><th>Marque</th><th>Van</th><th>Fourgon</th><th>Profilé</th><th>Capucine</th><th>Intégral</th><th>RFA</th></tr></thead><tbody>';
-      lignes.forEach(r => {
-        html += '<tr><td>' + r.Statut + '</td><td>' + r.Marque + '</td><td>' + (r.Van||0) + '</td><td>' + (r.Fourgon||0) + '</td><td>' + (r['Profilé']||0) + '</td><td>' + (r.Capucine||0) + '</td><td>' + (r['Intégral']||0) + '</td><td>' + (r.RFA||0) + '%</td></tr>';
-      });
-      html += '</tbody></table></div>';
+      html += makeTable(lignes);
+      html += '</div>';
     });
+ 
+    // Total cumulé
+    const totalCumule = rows.reduce((s, r) => s + getTotal(r), 0);
+    html += '<div style="margin-top:1.5rem;padding-top:1rem;border-top:2px solid var(--accent)">';
+    html += '<div style="font-size:14px;font-weight:700;color:var(--accent);margin-bottom:8px;">TOTAL CUMULÉ — ' + totalCumule + ' unité' + (totalCumule > 1 ? 's' : '') + '</div>';
+    html += makeTable(rows);
+    html += '</div>';
+ 
     document.getElementById('history-content').innerHTML = html;
   };
   const script = document.createElement('script');
